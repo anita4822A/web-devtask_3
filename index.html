@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>To-Do List App</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #c9ceca;
+}
+
+.container {
+    max-width: 800px;
+    margin: 40px auto;
+    background-color: rgba(249, 249, 249, 0.8);
+    padding: 20px; /* Add some padding for content */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+}
+
+.container h2 {
+    font-style: bold;
+    font-family: cursive;
+}
+
+.add-task input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    
+}
+
+.add-task input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    float: right;
+
+    
+}
+
+.task-list {
+    list-style: none;
+    padding: 0;
+    padding-top: 30px;
+}
+
+.task-list li {
+    background-color: #f4f4f4;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.task-list li.completed {
+    background-color: #d4edda;
+    text-decoration: line-through;
+}
+
+.task-list li .delete-btn,
+.task-list li .edit-btn {
+    float: right;
+    border: none;
+    padding: 2px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 2px;
+    transition: background-color 0.3s ease;
+}
+
+.task-list li .delete-btn:hover,
+.task-list li .edit-btn:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow on hover */
+}
+
+
+.task-list li .delete-btn:focus,
+.task-list li .edit-btn:focus {
+    outline: none; /* Remove the default focus outline */
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>My To-Do List</h2>
+    <div class="add-task">
+        <input type="text" id="taskInput" placeholder="Add new task...">
+        <input type="submit" id="addBtn" value="ADD TASK">
+    </div>
+    <ul class="task-list" id="taskList"></ul>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const taskInput = document.getElementById('taskInput');
+        const addBtn = document.getElementById('addBtn');
+        const taskList = document.getElementById('taskList');
+    
+        // Function to create a new task item
+        function createTaskItem(taskContent) {
+            const li = document.createElement('li');
+            li.textContent = taskContent;
+            
+            // Create Delete button
+            const deleteBtn = document.createElement('button');
+            deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+            deleteBtn.classList.add('delete-btn');
+            li.appendChild(deleteBtn);
+    
+            // Create Edit button
+            const editBtn = document.createElement('button');
+            editBtn.innerHTML = '<i class="fas fa-edit"></i>';
+            editBtn.classList.add('edit-btn');
+            li.appendChild(editBtn);
+    
+            // Event listener to delete task when delete button is clicked
+            deleteBtn.addEventListener('click', function() {
+                li.remove();
+            });
+    
+            // Event listener to mark task as completed when clicked
+            li.addEventListener('click', function() {
+                li.classList.toggle('completed');
+            });
+    
+            // Event listener to edit task
+            editBtn.addEventListener('click', function() {
+                const newTaskContent = prompt('Edit the task:', taskContent);
+                if (newTaskContent !== null) {
+                    li.textContent = newTaskContent;
+                    li.appendChild(deleteBtn);
+                    li.appendChild(editBtn);
+                }
+            });
+    
+            return li;
+        }
+    
+        // Function to add a new task
+        function addTask() {
+            const taskContent = taskInput.value.trim();
+            if (taskContent !== '') {
+                const taskItem = createTaskItem(taskContent);
+                taskList.appendChild(taskItem);
+                taskInput.value = '';
+            } else {
+                alert('Please enter a task!');
+            }
+        }
+    
+        // Event listener to add a new task when add button is clicked
+        addBtn.addEventListener('click', addTask);
+    
+        // Event listener to add a new task when Enter key is pressed
+        taskInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                addTask();
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
